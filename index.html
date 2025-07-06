@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flash Tether Satış</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f9fafb;
+    }
+    .card:hover {
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <div class="text-center mb-4">
+      <img src="doge-logo.png" alt="Doge Logo" style="width:60px;">
+      <h1 class="mt-2">Flash Tether</h1>
+      <p class="text-muted">Dogecoin ile Simüle Satış</p>
+    </div>
+
+    <div id="packages" class="row g-4"></div>
+
+    <div id="checkout" class="mt-5" style="display:none;">
+      <h3 class="mb-3">Satın Alma</h3>
+      <p id="packageInfo"></p>
+      <label class="form-label">USDT TRC20 Cüzdan Adresiniz:</label>
+      <input id="walletInput" class="form-control mb-3" type="text" placeholder="Örn: TX123...">
+      <div id="dogeInfo" style="display:none;">
+        <p class="fw-bold">Lütfen aşağıdaki adrese <span id="dogeAmount"></span> DOGE gönderin:</p>
+        <code class="d-block mb-2">DK3pRb9anQtYiBCMYvkMz1k1aBNvGzyh9</code>
+        <button onclick="confirmPayment()" class="btn btn-success">Ödeme Yaptım</button>
+      </div>
+    </div>
+
+    <div id="thankYou" class="text-center mt-5" style="display:none;">
+      <h3 class="text-success">Teşekkürler!</h3>
+      <p>Ödemeniz simüle edildi. Flash Tether gönderimi sıraya alındı.</p>
+    </div>
+  </div>
+
+  <script>
+    const packages = [
+      { qty: 1000, price: 50 },
+      { qty: 5000, price: 220 },
+      { qty: 10000, price: 400 },
+      { qty: 50000, price: 1800 },
+      { qty: 100000, price: 3500 },
+      { qty: 500000, price: 16000 },
+      { qty: 1000000, price: 30000 }
+    ];
+
+    const container = document.getElementById("packages");
+    let selected = null;
+
+    packages.forEach(pkg => {
+      const col = document.createElement("div");
+      col.className = "col-sm-6 col-md-4";
+      col.innerHTML = `
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <h5 class="card-title">${pkg.qty.toLocaleString()} Flash Tether</h5>
+            <p>${pkg.price} DOGE</p>
+            <button class="btn btn-primary" onclick='selectPackage(${JSON.stringify(pkg)})'>Satın Al</button>
+          </div>
+        </div>`;
+      container.appendChild(col);
+    });
+
+    function selectPackage(pkg) {
+      selected = pkg;
+      document.getElementById("packageInfo").innerText = `${pkg.qty.toLocaleString()} Flash Tether - ${pkg.price} DOGE`;
+      document.getElementById("checkout").style.display = "block";
+      document.getElementById("thankYou").style.display = "none";
+      document.getElementById("dogeInfo").style.display = "none";
+    }
+
+    document.getElementById("walletInput").addEventListener("input", function() {
+      if (this.value.length > 10) {
+        document.getElementById("dogeInfo").style.display = "block";
+        document.getElementById("dogeAmount").innerText = selected.price;
+      } else {
+        document.getElementById("dogeInfo").style.display = "none";
+      }
+    });
+
+    function confirmPayment() {
+      document.getElementById("checkout").style.display = "none";
+      document.getElementById("thankYou").style.display = "block";
+    }
+  </script>
+</body>
+</html>
